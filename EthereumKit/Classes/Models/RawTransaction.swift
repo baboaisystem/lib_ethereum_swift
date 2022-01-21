@@ -1,6 +1,6 @@
 import BigInt
 
-public class RawTransaction {
+class RawTransaction {
     let gasPrice: Int
     let gasLimit: Int
     let to: Address

@@ -1,18 +1,18 @@
 Pod::Spec.new do |s|
   s.name             = 'EthereumKit.swift'
   s.module_name      = 'EthereumKit'
-  s.version          = '0.0.1'
+  s.version          = '0.15.1'
   s.summary          = 'Ethereum wallet library for Swift.'
 
   s.description      = <<-DESC
 EthereumKit.swift implements Ethereum protocol in Swift.
                        DESC
 
-  s.homepage         = 'https://github.com/baboaisystem/lib_ethereum_swift'
+  s.homepage         = 'https://github.com/horizontalsystems/ethereum-kit-ios'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Baboai Systems' => 'snow@baboai.com' }
-  s.source           = { git: 'https://github.com/baboaisystem/lib_ethereum_swift.git', tag: "#{s.version}" }
-  s.social_media_url = 'https://baboai.com/'
+  s.author           = { 'Horizontal Systems' => 'hsdao@protonmail.ch' }
+  s.source           = { git: 'https://github.com/horizontalsystems/ethereum-kit-ios.git', tag: "#{s.version}" }
+  s.social_media_url = 'http://horizontalsystems.io/'
 
   s.ios.deployment_target = '13.0'
   s.swift_version = '5'
@@ -20,6 +20,14 @@ EthereumKit.swift implements Ethereum protocol in Swift.
   s.source_files = 'EthereumKit/Classes/**/*'
 
   s.requires_arc = true
+
+#   s.preserve_paths = ['EthereumKit/Libraries']
+#   s.vendored_libraries  = 'EthereumKit/Libraries/lib/libincubed.a'
+
+#   s.pod_target_xcconfig = {
+#     'HEADER_SEARCH_PATHS' => '"${PODS_TARGET_SRCROOT}/EthereumKit/Libraries/include"',
+#     'LIBRARY_SEARCH_PATHS' => '"${PODS_TARGET_SRCROOT}/EthereumKit/Libraries/lib"'
+#   }
 
   s.dependency 'OpenSslKit.swift', '~> 1.0'
   s.dependency 'Secp256k1Kit.swift', '~> 1.0'

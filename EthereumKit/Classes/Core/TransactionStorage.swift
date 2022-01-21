@@ -21,7 +21,7 @@ class TransactionStorage {
                 t.column(Transaction.Columns.nonce.name, .integer).notNull()
                 t.column(Transaction.Columns.input.name, .text).notNull()
                 t.column(Transaction.Columns.from.name, .text).notNull()
-                t.column(Transaction.Columns.to.name, .text)
+                t.column(Transaction.Columns.to.name, .text).notNull()
                 t.column(Transaction.Columns.value.name, .text).notNull()
                 t.column(Transaction.Columns.gasLimit.name, .integer).notNull()
                 t.column(Transaction.Columns.gasPrice.name, .integer).notNull()

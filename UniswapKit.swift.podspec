@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.name             = 'UniswapKit.swift'
   s.module_name      = 'UniswapKit'
-  s.version          = '0.0.1'
+  s.version          = '0.15.1'
   s.summary          = 'Uniswap exchange integration for Swift.'
 
-  s.homepage         = 'https://github.com/baboaisystem/lib_ethereum_swift'
+  s.homepage         = 'https://github.com/horizontalsystems/ethereum-kit-ios'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Baboai Systems' => 'snow@protonmail.ch' }
+  s.author           = { 'Horizontal Systems' => 'hsdao@protonmail.ch' }
   s.source           = { git: 'https://github.com/horizontalsystems/ethereum-kit-ios.git', tag: "uniswap-#{s.version}" }
   s.social_media_url = 'http://horizontalsystems.io/'
 
@@ -17,8 +17,8 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
 
-  s.dependency 'EthereumKit.swift', '~> 0.0.1'
-  s.dependency 'Erc20Kit.swift', '~> 0.0.1'
+  s.dependency 'EthereumKit.swift', '~> 0.15'
+  s.dependency 'Erc20Kit.swift', '~> 0.15'
   s.dependency 'OpenSslKit.swift', '~> 1.0'
   s.dependency 'Secp256k1Kit.swift', '~> 1.0'
 

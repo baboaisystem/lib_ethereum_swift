@@ -32,7 +32,6 @@ class OneInchController: UIViewController {
 
     private let gasPrice = 40_000_000_000
 
-    private let signer = Manager.shared.signer
     private let ethereumKit = Manager.shared.evmKit!
     private let fromAdapter: IAdapter = Manager.shared.erc20Adapters[0]
     private let toAdapter: IAdapter = Manager.shared.ethereumAdapter
@@ -397,32 +396,15 @@ class OneInchController: UIViewController {
 
         let transactionData = adapter.erc20Kit.approveTransactionData(spenderAddress: spenderAddress, amount: amount)
 
-        guard let signer = signer else {
-            return
-        }
-
         ethereumKit.estimateGas(transactionData: transactionData, gasPrice: gasPrice)
-                .flatMap { [weak self] gasLimit -> Single<RawTransaction> in
-                    guard let strongSelf = self else {
-                        throw Signer.SendError.weakReferenceError
-                    }
-
+                .flatMap { gasLimit -> Single<FullTransaction> in
                     print("GAS LIMIT SUCCESS: \(gasLimit)")
-                    return strongSelf.ethereumKit.rawTransaction(transactionData: transactionData, gasPrice: gasPrice, gasLimit: gasLimit)
-                }
-                .flatMap { [weak self] rawTransaction in
-                    guard let strongSelf = self else {
-                        throw Signer.SendError.weakReferenceError
-                    }
-
-                    let signature = try signer.signature(rawTransaction: rawTransaction)
-
-                    return strongSelf.ethereumKit.sendSingle(rawTransaction: rawTransaction, signature: signature)
+                    return self.ethereumKit.sendSingle(transactionData: transactionData, gasPrice: gasPrice, gasLimit: gasLimit)
                 }
                 .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
                 .observeOn(MainScheduler.instance)
-                .subscribe(onSuccess: { (tx: FullTransaction) in
-                    print("SUCCESS: \(tx.transaction.hash.toHexString())")
+                .subscribe(onSuccess: { txHash in
+                    print("SUCCESS: \(txHash)")
                 }, onError: { error in
                     print("ERROR: \(error)")
                 })
@@ -430,32 +412,20 @@ class OneInchController: UIViewController {
     }
 
     private func swap(transactionData: TransactionData) {
-        guard let signer = signer else {
-            return
-        }
-
-        return ethereumKit.estimateGas(transactionData: transactionData, gasPrice: gasPrice)
-                .flatMap { [weak self] gasLimit in
-                    guard let strongSelf = self else {
-                        throw Signer.SendError.weakReferenceError
-                    }
-
+        return ethereumKit.estimateGas(
+                        transactionData: transactionData,
+                        gasPrice: gasPrice
+                ).flatMap { [unowned self] gasLimit -> Single<FullTransaction> in
                     print("GAS LIMIT SUCCESS: \(gasLimit)")
-                    return strongSelf.ethereumKit.rawTransaction(transactionData: transactionData, gasPrice: strongSelf.gasPrice, gasLimit: gasLimit)
-                }
-                .flatMap { [weak self] (rawTransaction: RawTransaction) in
-                    guard let strongSelf = self else {
-                        throw Signer.SendError.weakReferenceError
-                    }
-
-                    let signature = try signer.signature(rawTransaction: rawTransaction)
-
-                    return strongSelf.ethereumKit.sendSingle(rawTransaction: rawTransaction, signature: signature)
+                    return ethereumKit.sendSingle(
+                            transactionData: transactionData,
+                            gasPrice: gasPrice,
+                            gasLimit: gasLimit)
                 }
                 .subscribeOn(ConcurrentDispatchQueueScheduler(qos: .userInitiated))
                 .observeOn(MainScheduler.instance)
-                .subscribe(onSuccess: { (tx: FullTransaction) in
-                    print("SUCCESS: \(tx.transaction.hash.toHexString())")
+                .subscribe(onSuccess: { FullTransaction in
+                    print("SUCCESS: \(FullTransaction.transaction.hash.toHexString())")
                 }, onError: { error in
                     print("ERROR: \(error)")
                 })
