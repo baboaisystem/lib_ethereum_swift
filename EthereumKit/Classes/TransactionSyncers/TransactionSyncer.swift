@@ -86,12 +86,26 @@ class TransactionSyncer: AbstractTransactionSyncer {
     }
 
     private func finalizeSync(notSyncedTransaction: NotSyncedTransaction, transaction: RpcTransaction, timestamp: Int) {
+        // let transaction = Transaction(
+        //         hash: transaction.hash,
+        //         nonce: transaction.nonce,
+        //         input: transaction.input,
+        //         from: transaction.from,
+        //         to: transaction.to,
+        //         value: transaction.value,
+        //         gasLimit: transaction.gasLimit,
+        //         gasPrice: transaction.gasPrice,
+        //         timestamp: timestamp
+        // )
+
+        let address = try? EthereumKit.Address(hex: "0x0000000000000000000000000000000000000000")
+        
         let transaction = Transaction(
                 hash: transaction.hash,
                 nonce: transaction.nonce,
                 input: transaction.input,
                 from: transaction.from,
-                to: transaction.to,
+                to: transaction.to ?? address,
                 value: transaction.value,
                 gasLimit: transaction.gasLimit,
                 gasPrice: transaction.gasPrice,
